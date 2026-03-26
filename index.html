@@ -102,11 +102,11 @@
   .message.ai .bubble { background: white; border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text-primary); }
   .message.user .bubble { background: var(--green-dark); color: white; }
 
-  .bubble p { margin-bottom: 10px; }
+  .bubble p { margin-bottom: 4px; }
   .bubble p:last-child { margin-bottom: 0; }
   .bubble strong { font-weight: 600; }
-  .bubble ul, .bubble ol { padding-left: 18px; margin: 8px 0; }
-  .bubble li { margin-bottom: 4px; }
+  .bubble ul, .bubble ol { padding-left: 16px; margin: 4px 0; }
+  .bubble li { margin-bottom: 2px; line-height: 1.5; }
   .bubble code { font-family: monospace; background: var(--green-pale); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
   .message.user .bubble code { background: rgba(255,255,255,0.15); }
 
@@ -373,23 +373,38 @@ function addMessage(role, content) {
 }
 
 function formatMarkdown(text) {
-  return text
+  text = text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^### (.*$)/gm, '<h4 style="font-size:14px;font-weight:600;margin:12px 0 6px;">$1</h4>')
-    .replace(/^## (.*$)/gm, '<h3 style="font-size:15px;font-weight:600;margin:14px 0 6px;">$1</h3>')
-    .replace(/^# (.*$)/gm, '<h2 style="font-size:16px;font-weight:600;margin:16px 0 8px;">$1</h2>')
-    .replace(/^\d+\. (.*)$/gm, '<li>$1</li>')
-    .replace(/^[-•] (.*)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul style="padding-left:18px;margin:8px 0;">' + m + '</ul>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>')
-    .replace(/^([^<\n].*)$/gm, m => m.startsWith('<') ? m : '<p>' + m + '</p>')
-    .replace(/<p><\/p>/g, '')
-    .replace(/<p>(<[uoh])/g, '$1')
-    .replace(/(<\/[uoh][l]>)<\/p>/g, '$1');
+    .replace(/^### (.*$)/gm, '<strong>$1</strong>')
+    .replace(/^## (.*$)/gm, '<strong>$1</strong>')
+    .replace(/^# (.*$)/gm, '<strong>$1</strong>');
+
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const isBullet = /^[-•*] (.*)$/.test(line) || /^\d+\. (.*)$/.test(line);
+
+    if (isBullet) {
+      if (!inList) { html += '<ul style="padding-left:16px;margin:4px 0;">'; inList = true; }
+      const content = line.replace(/^[-•*] /, '').replace(/^\d+\. /, '');
+      html += '<li style="margin-bottom:2px;">' + content + '</li>';
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      if (line.trim() === '') {
+        html += '';
+      } else {
+        html += '<p style="margin:0 0 4px;">' + line + '</p>';
+      }
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
 }
 
 function showTyping() {
