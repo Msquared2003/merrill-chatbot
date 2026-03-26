@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrill AI Assistant</title>
+<script>
+  const API_KEY = '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';
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d5a3d;
+    --green-accent: #4a8c5c;
+    --green-light: #e8f2eb;
+    --green-pale: #f3f8f4;
+    --cream: #faf8f4;
+    --text-primary: #1a1a18;
+    --text-secondary: #4a4a46;
+    --text-muted: #7a7a74;
+    --border: rgba(42, 80, 55, 0.15);
+    --border-strong: rgba(42, 80, 55, 0.3);
+    --shadow: 0 2px 12px rgba(26, 58, 42, 0.08);
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  header {
+    background: var(--green-dark);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .header-left { display: flex; align-items: center; gap: 12px; }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--green-accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    color: white; font-size: 16px;
+  }
+
+  .header-title { color: white; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
+  .header-sub { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 400; }
+
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #5dbf7a; margin-right: 6px; display: inline-block; }
+  .status-text { color: rgba(255,255,255,0.6); font-size: 12px; display: flex; align-items: center; }
+
+  .chat-area {
+    flex: 1; overflow-y: auto; padding: 24px;
+    display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
+  }
+  .chat-area::-webkit-scrollbar { width: 4px; }
+  .chat-area::-webkit-scrollbar-track { background: transparent; }
+  .chat-area::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+  .welcome-card {
+    background: white; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow); max-width: 640px; align-self: center; width: 100%; text-align: center;
+  }
+  .welcome-icon {
+    width: 48px; height: 48px; background: var(--green-light); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px;
+  }
+  .welcome-card h2 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--green-dark); margin-bottom: 8px; font-weight: 400; }
+  .welcome-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+
+  .quick-prompts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .quick-prompt {
+    background: var(--green-pale); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 12px; color: var(--green-mid); cursor: pointer;
+    text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.15s; line-height: 1.4;
+  }
+  .quick-prompt:hover { background: var(--green-light); border-color: var(--green-accent); }
+
+  .message { display: flex; gap: 12px; max-width: 800px; width: 100%; align-self: flex-start; animation: fadeIn 0.2s ease; }
+  .message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .avatar { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .avatar.ai { background: var(--green-dark); color: white; font-family: 'DM Serif Display', serif; }
+  .avatar.user { background: var(--green-accent); color: white; }
+
+  .bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.65; max-width: calc(100% - 44px); }
+  .message.ai .bubble { background: white; border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text-primary); }
+  .message.user .bubble { background: var(--green-dark); color: white; }
+
+  .bubble p { margin-bottom: 10px; }
+  .bubble p:last-child { margin-bottom: 0; }
+  .bubble strong { font-weight: 600; }
+  .bubble ul, .bubble ol { padding-left: 18px; margin: 8px 0; }
+  .bubble li { margin-bottom: 4px; }
+  .bubble code { font-family: monospace; background: var(--green-pale); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  .message.user .bubble code { background: rgba(255,255,255,0.15); }
+
+  .typing-indicator { display: flex; gap: 12px; max-width: 800px; align-self: flex-start; animation: fadeIn 0.2s ease; }
+  .typing-dots { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; box-shadow: var(--shadow); }
+  .typing-dot { width: 7px; height: 7px; background: var(--green-accent); border-radius: 50%; animation: bounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+  .input-area { padding: 16px 24px 20px; background: white; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .input-wrapper {
+    display: flex; gap: 10px; align-items: flex-end; max-width: 800px; margin: 0 auto;
+    background: var(--cream); border: 1.5px solid var(--border-strong); border-radius: 14px;
+    padding: 10px 10px 10px 16px; transition: border-color 0.15s;
+  }
+  .input-wrapper:focus-within { border-color: var(--green-accent); }
+
+  #userInput {
+    flex: 1; border: none; background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--text-primary); resize: none; outline: none; max-height: 120px; line-height: 1.5;
+  }
+  #userInput::placeholder { color: var(--text-muted); }
+
+  #sendBtn {
+    width: 34px; height: 34px; background: var(--green-dark); border: none; border-radius: 8px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.1s;
+  }
+  #sendBtn:hover { background: var(--green-mid); }
+  #sendBtn:active { transform: scale(0.95); }
+  #sendBtn:disabled { background: var(--text-muted); cursor: not-allowed; }
+  #sendBtn svg { width: 16px; height: 16px; }
+
+  .input-hint { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
+  .error-bubble { background: #fff5f5; border: 1px solid #fcc; border-radius: 12px; padding: 12px 16px; font-size: 14px; color: #c0392b; max-width: calc(100% - 44px); }
+
+  .search-note {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--green-pale); color: var(--green-mid); font-size: 11px;
+    padding: 3px 8px; border-radius: 20px; margin-bottom: 8px; border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-mark">M</div>
+    <div>
+      <div class="header-title">Merrill AI Assistant</div>
+      <div class="header-sub">Internal Staff Tool</div>
+    </div>
+  </div>
+  <div class="status-text"><span class="status-dot"></span>Online</div>
+</header>
+
+<div class="chat-area" id="chatArea">
+  <div class="welcome-card">
+    <div class="welcome-icon">🌿</div>
+    <h2>How can I help today?</h2>
+    <p>I know Merrill's services, policies, and pricing inside out. I can also look up Service Autopilot how-tos and search the web for anything else you need.</p>
+    <div class="quick-prompts">
+      <button class="quick-prompt" onclick="sendQuick(this)">How do I add a new client in Service Autopilot?</button>
+      <button class="quick-prompt" onclick="sendQuick(this)">What's included in weekly mowing?</button>
+      <button class="quick-prompt" onclick="sendQuick(this)">Draft a reply to a client asking about biweekly mowing pricing</button>
+      <button class="quick-prompt" onclick="sendQuick(this)">How does snow removal billing work for residential?</button>
+    </div>
+  </div>
+</div>
+
+<div class="input-area">
+  <div class="input-wrapper">
+    <textarea id="userInput" rows="1" placeholder="Ask about services, policies, Service Autopilot, or anything else..." oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+    <button id="sendBtn" onclick="sendMessage()" title="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
+  <div class="input-hint">Merrill Landscape Services · Internal Use Only</div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are the internal AI assistant for Merrill Landscape Services, a landscaping company based in Champaign, IL. You assist employees (not clients) with operational questions, client communications, Service Autopilot CRM guidance, and general research.
+
+## Company Overview
+Merrill Landscape Services is dedicated to designing and maintaining beautiful landscapes. Over 35 years of combined experience. Core values: Quality, Customer Satisfaction, Attention to Detail, Environmental Responsibility (100% carbon-neutral through Clean Advantage program).
+
+Hours: Mon-Thu 9am-5pm, Fri 9am-3pm, Sat-Sun closed.
+Contact: (217) 298-2255 | info@merrillservices.com | 2616 N Mattis Ave, Champaign, IL 61822 | merrillservices.com
+Primary contacts: Marcus Merrill (President/CEO) and Bailey Billman.
+CRM: Service Autopilot V2.
+
+## Service Areas
+Champaign, Urbana, Bloomington, Normal, Downs, Le Roy, Farmer City, Mansfield, Mahomet, Savoy, White Heath, Seymour, Bondville, Monticello. Snow removal limited to Champaign/Urbana immediate area.
+
+## Writing Style (for drafting client emails)
+- Professional, approachable, practical. Clear and friendly but not overly formal or salesy.
+- Avoid em dashes. Avoid excessive corporate language.
+- Standard intro for estimates: "You recently requested pricing..."
+- Default sign-off: "Thanks"
+- Do NOT include a signature unless specifically requested.
+- Address questions directly. Offer helpful suggestions and clarify next steps.
+- Do not push unwanted add-ons. Offer to clarify or adjust as needed.
+
+## General Policies
+Scheduling: Clients receive service timing via email. Weekly mowing: skip allowed with 24hr notice. All other services: 24hr notice to cancel/reschedule. Late cancellation or no-access: trip charge may apply. Weather delays communicated via email.
+
+Billing: Invoices generated Mondays for prior week. Payment due upon receipt (larger projects may require deposit). Commercial snow billed monthly; residential billed after each event. All major credit/debit cards accepted. Card required on file for residential. Card only auto-charged for autopay or delinquent accounts. Recurring service discounts available (confirm with Marcus/Bailey before quoting).
+
+Credit Card Policy: Clients can add card via portal or by calling. Not auto-charged unless autopay or past-due.
+
+Weather: All outdoor services are weather-dependent. Reschedule at earliest opportunity. Updates via email.
+
+Satisfaction: 100% money-back guarantee if service does not meet expectations. If issue arises, acknowledge, explain resolution steps, offer to review work.
+
+## Lawn Care Services
+- Weekly Mowing: starts $49.95, priced by satellite imagery. Includes mowing, trimming, edging, blowing + lawn evaluation.
+- Biweekly Mowing: starts $69.95. Same scope as weekly.
+- One-Time Mowing: starts $79.95.
+- Lawn Edging: mechanical/manual edging along hard surfaces.
+- Leaf Cleanup (Fixed): blow/pickup/mulch leaves.
+- Leaf Cleanup (Hourly): $69.95/person/hr + $1.37/bushel removal.
+- Dethatching: power dethatch, rake/remove thatch debris.
+- Aeration / Double Aeration: core aeration priced by lawn size via satellite.
+- Aeration w/ Overseeding: aeration + premium seed + cleanup.
+- Slit Seeding: precision slit seeding with premium seed.
+- Gutter Cleaning: NOT currently offered.
+- Mowing clippings: always mulched back into the lawn.
+
+## Fertilization & Chemical Applications
+- 8/yr Monthly Fertilization, Weed Control & Grub Prevention: starts $49.95/month, March-October. Uses 100% Poly-Coated Urea slow-release formula. (Also offer 5/yr, 6/yr, 7/yr but do not mention unless client asks.)
+- CarbonPro: aeration add-on, frees bound soil nutrients.
+- Turf Pre-Emergent (Dimension, 180-day): applied March-May.
+- Starter Fertilizer: aeration add-on for new grass.
+- Broadleaf Weed Control: blanket and spot spray.
+- Grub Control (Merit): applied July.
+- Organic Fertilization: natural source fertilizer.
+- Landscape Bed & Shrub Fertilization: seasonal, by request.
+- Landscape Bed Pre-emergent: prevents weed germination in beds.
+- Gypsum Soil Conditioner: aeration add-on for drainage.
+- Nutsedge/Nimblewill: targeted herbicide treatment.
+- Vole Treatment: bait stations, habitat modification.
+- Fungicide/Insecticide (Headway G, Dylox): granular application.
+- Mosquito/Bug Control (MosqShield): monthly April-October.
+- Bagworm Treatment: targets evergreen pests.
+- Non-lawn Weed Control: mulch beds, sidewalks, patios, etc.
+
+Fertilization safety: safe for pets/children; stay off lawn ~1 hour after application (20 min on sunny days). Do not mow for 1-2 days after weed control. Results visible in a few days to 2 weeks for weeds; ~1 month for fertilizer.
+
+## Irrigation Services
+- Startup: $149.95. Pressurize, inspect zones, adjust heads, program controller.
+- Winterization: $149.95. Shut down, blow out lines with compressor.
+- Emergency Irrigation Repair: priority dispatch, higher rate. Call preferred.
+- Scheduling emails sent end of April (startups) and end of September (winterizations). Target: startups by end of May, winterizations by end of October.
+- No installation services, only startups, winterizations, and repairs.
+- For plumbing/backflow issues beyond scope: document findings, research and recommend qualified local plumber with contact info.
+
+## Landscape Maintenance
+- Landscape Maintenance (Hourly): $64.95/person/hr + $25.95/yard of waste removed. Monthly option available. Spending cap can be set per visit.
+- Landscape Maintenance (Fixed): flat all-inclusive rate. One-time.
+- Bed Edging: mechanical or manual bed edge redefinition.
+- Mulch Installation: delivery + installation at 2-3 inch depth. Shredded hardwood, dyed, natural, or customer-specified.
+- Shrub Trimming: shaping, remove overgrowth/dead branches, cleanup.
+- Spring/Fall Cleanup: leaf removal from beds and lawn, overgrowth/weeds, cut back perennials, stick removal.
+
+## Landscape Design & Build
+- Landscape Design: on-site consultation, scaled design plan, revisions. Optional 3D renderings (extra fee). Installation estimate upon completion.
+- Landscape Installation, Paver/Stone Edging, Grading/Soil Prep/Tilling, Tree/Shrub Planting.
+
+## Tree & Stump Services
+- Tree Trimming: small to medium ornamental trees, up to 15-20ft. Pruning, shaping, cleanup.
+- Tree Removal: full takedown, debris removal. Equipment rental cost passed to client. Optional stump grinding.
+- Stump Grinding: grind to 4-6 inches below grade. Optional debris hauling.
+- Large tree removal may be outside capabilities, refer to trusted third party.
+
+## Snow & Ice Management
+- Commercial seasonal contracts: per-event billing based on snowfall ranges (0-3.99", 4-7.99", 8-11.99", 12"+, etc.). Salt billed separately by pound. No minimum accumulation required. 24/7 monitoring.
+- Residential (4 options):
+  Option 1: Driveway only, $59.95 base + $5/in under 6in, $10/in over 6in
+  Option 2: Driveway + walkway to front door, $69.95 base + $7/in under 6in, $14/in over 6in
+  Option 3: Driveway + walkway + 1 city sidewalk, $99.95 base + $9/in, $18/in
+  Option 4: Driveway + walkway + 2 city sidewalks (corner lot), $124.95 base + $11/in, $22/in
+- Add-ons: Stamped/paver driveway +$30 base +$1/in; Circle driveway +$20 +$1/in; Side-entry/L-shaped +$10 +$1/in; S or wave +$5 +$1/in; Additional standard driveway +$20 +$1/in; Extra walk up to 30ft +$15 +$1/in
+- Default trigger: 2 inches. Can customize.
+- Salting required for residential. Billed after each service.
+- Can add clients up to 24 hours before a snow event.
+
+## Fuel Surcharge
+ALL services are charged a fuel surcharge EXCEPT landscape installation.
+
+## Frequently Addressed Concerns
+- Lawn damage from mowers: inspect, discuss, repair at no charge.
+- Object damage: crew notes individual property hazards. Repair at no charge if damage occurs.
+- Mowed too quick: return and fix free of charge.
+- Gate left open: crew has route notes, can add gate alert.
+- Grass blown on surfaces: return to service for free. If cannot fix, pay to resolve.
+- Plow tore up lawn: repair in early spring at no charge.
+- Mowers too heavy: can switch to push mowing, but price may change.
+- Dry summer: crew still visits unless client cancels 24hr ahead. If grass does not meet serviceable conditions, skip + trip charge.
+- Pricing objections: not the cheapest but guarantee quality, front-page-worthy work, 100% satisfaction.
+- Card on file: required, but only charged for autopay or delinquency. Can also pay by check.
+
+## Office Tasks & Tools
+- Use satellite imagery only for mowing and standard fertilization estimates.
+- In-person appointment required for: targeted weed control, installations, repairs, cleanups, mulch, landscape design.
+- Recurring landscape maintenance does NOT need an appointment.
+- Google Suite used for all office work (Gmail, Docs, Sheets, Calendar). All staff calendars are shared, appointments can be scheduled on behalf of Marcus or Bailey.
+- Service Autopilot V2 is the primary CRM.
+
+## Service Autopilot CRM Guidance
+When an employee asks how to do something in Service Autopilot, use your knowledge of Service Autopilot V2 to provide step-by-step instructions. If you are unsure or the feature may have changed, use web search to look up current documentation at help.serviceautopilot.com or search "Service Autopilot how to [task]". Always be specific with navigation paths.
+
+## Web Search
+You have access to web search. Use it when looking up Service Autopilot documentation, researching local vendors, finding pricing benchmarks, or any question that benefits from current data. Always tell the employee when you are searching.
+
+## Tone
+You are talking to internal staff, not clients. Be direct and practical. For drafting client-facing emails, follow the writing style guidelines above. Always be helpful and specific. If you do not know something, say so and offer to search.`;
+
+let conversationHistory = [];
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function sendQuick(btn) {
+  document.getElementById('userInput').value = btn.textContent;
+  sendMessage();
+}
+
+function scrollToBottom() {
+  const chatArea = document.getElementById('chatArea');
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function addMessage(role, content) {
+  const chatArea = document.getElementById('chatArea');
+  const welcomeCard = chatArea.querySelector('.welcome-card');
+  if (welcomeCard) welcomeCard.remove();
+
+  const div = document.createElement('div');
+  div.className = 'message ' + role;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar ' + role;
+  avatar.textContent = role === 'ai' ? 'M' : 'U';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (role === 'ai') { bubble.innerHTML = formatMarkdown(content); }
+  else { bubble.textContent = content; }
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  chatArea.appendChild(div);
+  scrollToBottom();
+  return bubble;
+}
+
+function formatMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^### (.*$)/gm, '<h4 style="font-size:14px;font-weight:600;margin:12px 0 6px;">$1</h4>')
+    .replace(/^## (.*$)/gm, '<h3 style="font-size:15px;font-weight:600;margin:14px 0 6px;">$1</h3>')
+    .replace(/^# (.*$)/gm, '<h2 style="font-size:16px;font-weight:600;margin:16px 0 8px;">$1</h2>')
+    .replace(/^\d+\. (.*)$/gm, '<li>$1</li>')
+    .replace(/^[-•] (.*)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul style="padding-left:18px;margin:8px 0;">' + m + '</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^([^<\n].*)$/gm, m => m.startsWith('<') ? m : '<p>' + m + '</p>')
+    .replace(/<p><\/p>/g, '')
+    .replace(/<p>(<[uoh])/g, '$1')
+    .replace(/(<\/[uoh][l]>)<\/p>/g, '$1');
+}
+
+function showTyping() {
+  const chatArea = document.getElementById('chatArea');
+  const div = document.createElement('div');
+  div.className = 'typing-indicator';
+  div.id = 'typing';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar ai';
+  avatar.textContent = 'M';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  div.appendChild(avatar);
+  div.appendChild(dots);
+  chatArea.appendChild(div);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing');
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+  isLoading = true;
+
+  addMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      hideTyping();
+      const chatArea = document.getElementById('chatArea');
+      const errDiv = document.createElement('div');
+      errDiv.className = 'message ai';
+      errDiv.innerHTML = '<div class="avatar ai">M</div><div class="error-bubble">Error: ' + (data.error.message || 'Something went wrong. Please try again.') + '</div>';
+      chatArea.appendChild(errDiv);
+    } else {
+      const textContent = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+      const hasSearch = data.content.some(b => b.type === 'tool_use' && b.name === 'web_search');
+
+      hideTyping();
+      const bubble = addMessage('ai', '');
+      if (hasSearch) {
+        const note = document.createElement('div');
+        note.className = 'search-note';
+        note.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web search used';
+        bubble.insertBefore(note, bubble.firstChild);
+      }
+      bubble.innerHTML += formatMarkdown(textContent);
+
+      conversationHistory.push({ role: 'assistant', content: data.content });
+
+      if (data.stop_reason === 'tool_use') {
+        const toolUseBlock = data.content.find(b => b.type === 'tool_use');
+        if (toolUseBlock) {
+          conversationHistory.push({
+            role: 'user',
+            content: [{ type: 'tool_result', tool_use_id: toolUseBlock.id, content: 'Search completed.' }]
+          });
+        }
+      }
+    }
+  } catch (err) {
+    hideTyping();
+    const chatArea = document.getElementById('chatArea');
+    const errDiv = document.createElement('div');
+    errDiv.className = 'message ai';
+    errDiv.innerHTML = '<div class="avatar ai">M</div><div class="error-bubble">Network error. Check your connection and try again.</div>';
+    chatArea.appendChild(errDiv);
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  isLoading = false;
+  scrollToBottom();
+}
+</script>
+</body>
+</html>
