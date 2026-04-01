@@ -6,7 +6,8 @@ exports.handler = async function(event) {
     process.env.SUPABASE_KEY
   );
 
-  const { action, employee_name, memory, knowledge, admin_key } = JSON.parse(event.body);
+  const body = JSON.parse(event.body);
+  const { action, employee_name, memory, knowledge, admin_key } = body;
 
   if (action === 'get_memory') {
     const { data } = await supabase
@@ -35,23 +36,25 @@ exports.handler = async function(event) {
   if (action === 'get_knowledge') {
     const { data } = await supabase
       .from('knowledge_base')
-      .select('content')
-      .eq('id', 1)
-      .single();
+      .select('content, created_at')
+      .order('created_at', { ascending: true });
+    const combined = data && data.length > 0
+      ? data.map(r => r.content).join('\n\n')
+      : '';
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ content: data?.content || '' })
+      body: JSON.stringify({ content: combined })
     };
   }
 
-  if (action === 'save_knowledge') {
+  if (action === 'add_knowledge') {
     if (admin_key !== process.env.ADMIN_KEY) {
       return { statusCode: 403, body: JSON.stringify({ error: 'Unauthorized' }) };
     }
     await supabase
       .from('knowledge_base')
-      .upsert({ id: 1, content: knowledge, updated_at: new Date() });
+      .insert({ content: knowledge, created_at: new Date() });
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
