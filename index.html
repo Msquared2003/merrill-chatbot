@@ -25,92 +25,94 @@
     --radius: 12px;
   }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text-primary);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-  header {
-    background: var(--green-dark);
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+  /* LOGIN SCREEN */
+  #loginScreen {
+    position: fixed; inset: 0; background: var(--cream);
+    display: flex; align-items: center; justify-content: center; z-index: 100; padding: 24px;
   }
+  .login-card {
+    background: white; border: 1px solid var(--border); border-radius: 16px;
+    padding: 40px 32px; max-width: 400px; width: 100%;
+    box-shadow: 0 4px 24px rgba(26,58,42,0.1); text-align: center;
+  }
+  .login-logo { width: 52px; height: 52px; background: var(--green-accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; color: white; font-size: 24px; margin: 0 auto 20px; }
+  .login-card h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--green-dark); font-weight: 400; margin-bottom: 6px; }
+  .login-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+  .login-input { width: 100%; border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-primary); background: var(--cream); outline: none; margin-bottom: 12px; transition: border-color 0.15s; }
+  .login-input:focus { border-color: var(--green-accent); }
+  .login-btn { width: 100%; background: var(--green-dark); color: white; border: none; border-radius: 10px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .login-btn:hover { background: var(--green-mid); }
+  .login-note { font-size: 11px; color: var(--text-muted); margin-top: 12px; }
 
+  /* ADMIN SCREEN */
+  #adminScreen {
+    position: fixed; inset: 0; background: var(--cream);
+    display: none; flex-direction: column; z-index: 99; overflow-y: auto;
+  }
+  .admin-header { background: var(--green-dark); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .admin-header h1 { color: white; font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; }
+  .admin-body { padding: 32px 24px; max-width: 860px; margin: 0 auto; width: 100%; }
+  .admin-body h2 { font-size: 16px; font-weight: 600; color: var(--green-dark); margin-bottom: 8px; }
+  .admin-body p { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5; }
+  #knowledgeEditor { width: 100%; height: 480px; border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-primary); background: white; outline: none; resize: vertical; line-height: 1.6; }
+  #knowledgeEditor:focus { border-color: var(--green-accent); }
+  .admin-key-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .admin-key-input { flex: 1; border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; background: var(--cream); }
+  .admin-key-input:focus { border-color: var(--green-accent); }
+  .save-btn { background: var(--green-dark); color: white; border: none; border-radius: 10px; padding: 10px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .save-btn:hover { background: var(--green-mid); }
+  .admin-status { font-size: 13px; margin-top: 10px; color: var(--green-accent); display: none; }
+  .back-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 8px; padding: 6px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+  .back-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* HEADER */
+  header { background: var(--green-dark); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .header-left { display: flex; align-items: center; gap: 12px; }
-
-  .logo-mark {
-    width: 32px; height: 32px;
-    background: var(--green-accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Serif Display', serif;
-    color: white; font-size: 16px;
-  }
-
-  .header-title { color: white; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
-  .header-sub { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 400; }
-
+  .logo-mark { width: 32px; height: 32px; background: var(--green-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; color: white; font-size: 16px; }
+  .header-title { color: white; font-size: 15px; font-weight: 500; }
+  .header-sub { color: rgba(255,255,255,0.5); font-size: 12px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .user-badge { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); border-radius: 20px; padding: 4px 12px; font-size: 12px; }
+  .admin-link { background: none; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.6); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+  .admin-link:hover { background: rgba(255,255,255,0.1); color: white; }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #5dbf7a; margin-right: 6px; display: inline-block; }
   .status-text { color: rgba(255,255,255,0.6); font-size: 12px; display: flex; align-items: center; }
 
-  .chat-area {
-    flex: 1; overflow-y: auto; padding: 24px;
-    display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
-  }
+  /* CHAT */
+  .chat-area { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
   .chat-area::-webkit-scrollbar { width: 4px; }
-  .chat-area::-webkit-scrollbar-track { background: transparent; }
   .chat-area::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
-  .welcome-card {
-    background: white; border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 24px; box-shadow: var(--shadow); max-width: 640px; align-self: center; width: 100%; text-align: center;
-  }
-  .welcome-icon {
-    width: 48px; height: 48px; background: var(--green-light); border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px;
-  }
+  .welcome-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); max-width: 640px; align-self: center; width: 100%; text-align: center; }
+  .welcome-icon { width: 48px; height: 48px; background: var(--green-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; }
   .welcome-card h2 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--green-dark); margin-bottom: 8px; font-weight: 400; }
   .welcome-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
-
   .quick-prompts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .quick-prompt {
-    background: var(--green-pale); border: 1px solid var(--border); border-radius: 8px;
-    padding: 10px 12px; font-size: 12px; color: var(--green-mid); cursor: pointer;
-    text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.15s; line-height: 1.4;
-  }
+  .quick-prompt { background: var(--green-pale); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--green-mid); cursor: pointer; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.15s; line-height: 1.4; }
   .quick-prompt:hover { background: var(--green-light); border-color: var(--green-accent); }
 
   .message { display: flex; gap: 12px; max-width: 800px; width: 100%; align-self: flex-start; animation: fadeIn 0.2s ease; }
   .message.user { align-self: flex-end; flex-direction: row-reverse; }
-
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
   .avatar { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
   .avatar.ai { background: var(--green-dark); color: white; font-family: 'DM Serif Display', serif; }
-  .avatar.user { background: var(--green-accent); color: white; }
+  .avatar.user { background: var(--green-accent); color: white; font-size: 11px; }
 
-  .bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.65; max-width: calc(100% - 44px); }
+  .bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.6; max-width: calc(100% - 44px); }
   .message.ai .bubble { background: white; border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text-primary); }
   .message.user .bubble { background: var(--green-dark); color: white; }
-
-  .bubble p { margin-bottom: 4px; }
-  .bubble p:last-child { margin-bottom: 0; }
+  .bubble p { margin: 0 0 4px; }
+  .bubble p:last-child { margin: 0; }
   .bubble strong { font-weight: 600; }
   .bubble ul, .bubble ol { padding-left: 16px; margin: 4px 0; }
   .bubble li { margin-bottom: 2px; line-height: 1.5; }
   .bubble code { font-family: monospace; background: var(--green-pale); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
   .message.user .bubble code { background: rgba(255,255,255,0.15); }
 
-  .typing-indicator { display: flex; gap: 12px; max-width: 800px; align-self: flex-start; animation: fadeIn 0.2s ease; }
+  .typing-indicator { display: flex; gap: 12px; max-width: 800px; align-self: flex-start; }
   .typing-dots { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; box-shadow: var(--shadow); }
   .typing-dot { width: 7px; height: 7px; background: var(--green-accent); border-radius: 50%; animation: bounce 1.2s infinite; }
   .typing-dot:nth-child(2) { animation-delay: 0.2s; }
@@ -118,39 +120,56 @@
   @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
 
   .input-area { padding: 16px 24px 20px; background: white; border-top: 1px solid var(--border); flex-shrink: 0; }
-  .input-wrapper {
-    display: flex; gap: 10px; align-items: flex-end; max-width: 800px; margin: 0 auto;
-    background: var(--cream); border: 1.5px solid var(--border-strong); border-radius: 14px;
-    padding: 10px 10px 10px 16px; transition: border-color 0.15s;
-  }
+  .input-wrapper { display: flex; gap: 10px; align-items: flex-end; max-width: 800px; margin: 0 auto; background: var(--cream); border: 1.5px solid var(--border-strong); border-radius: 14px; padding: 10px 10px 10px 16px; transition: border-color 0.15s; }
   .input-wrapper:focus-within { border-color: var(--green-accent); }
-
-  #userInput {
-    flex: 1; border: none; background: transparent; font-family: 'DM Sans', sans-serif;
-    font-size: 14px; color: var(--text-primary); resize: none; outline: none; max-height: 120px; line-height: 1.5;
-  }
+  #userInput { flex: 1; border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-primary); resize: none; outline: none; max-height: 120px; line-height: 1.5; }
   #userInput::placeholder { color: var(--text-muted); }
-
-  #sendBtn {
-    width: 34px; height: 34px; background: var(--green-dark); border: none; border-radius: 8px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.1s;
-  }
+  #sendBtn { width: 34px; height: 34px; background: var(--green-dark); border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.1s; }
   #sendBtn:hover { background: var(--green-mid); }
   #sendBtn:active { transform: scale(0.95); }
   #sendBtn:disabled { background: var(--text-muted); cursor: not-allowed; }
   #sendBtn svg { width: 16px; height: 16px; }
-
   .input-hint { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 8px; }
-  .error-bubble { background: #fff5f5; border: 1px solid #fcc; border-radius: 12px; padding: 12px 16px; font-size: 14px; color: #c0392b; max-width: calc(100% - 44px); }
-  .search-note {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: var(--green-pale); color: var(--green-mid); font-size: 11px;
-    padding: 3px 8px; border-radius: 20px; margin-bottom: 8px; border: 1px solid var(--border);
-  }
+
+  .error-bubble { background: #fff5f5; border: 1px solid #fcc; border-radius: 12px; padding: 10px 14px; font-size: 14px; color: #c0392b; max-width: calc(100% - 44px); }
+  .search-note { display: inline-flex; align-items: center; gap: 5px; background: var(--green-pale); color: var(--green-mid); font-size: 11px; padding: 3px 8px; border-radius: 20px; margin-bottom: 6px; border: 1px solid var(--border); }
+  .memory-note { display: inline-flex; align-items: center; gap: 5px; background: #f0f4ff; color: #4a6fa5; font-size: 11px; padding: 3px 8px; border-radius: 20px; margin-bottom: 6px; border: 1px solid #d0dcf0; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">M</div>
+    <h2>Merrill AI Assistant</h2>
+    <p>Enter your name to get started. Your memory and preferences will be saved for next time.</p>
+    <input type="text" id="nameInput" class="login-input" placeholder="Your first and last name" autocomplete="name" />
+    <input type="text" id="roleInput" class="login-input" placeholder="Your role (e.g. Office Manager, Crew Lead)" />
+    <button class="login-btn" onclick="login()">Get Started</button>
+    <div class="login-note">Conversations are private and not visible to anyone else.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminScreen">
+  <div class="admin-header">
+    <h1>Admin — Knowledge Base Editor</h1>
+    <button class="back-btn" onclick="closeAdmin()">Back to Chat</button>
+  </div>
+  <div class="admin-body">
+    <h2>Company Knowledge Base</h2>
+    <p>Edit the information below to update what the AI knows about Merrill's services, pricing, and policies. Changes take effect immediately for all users — no code changes needed. This replaces the need to edit any HTML files.</p>
+    <div class="admin-key-row">
+      <input type="password" id="adminKeyInput" class="admin-key-input" placeholder="Admin password to save changes" />
+      <button class="save-btn" onclick="saveKnowledge()">Save Changes</button>
+    </div>
+    <textarea id="knowledgeEditor" placeholder="Loading..."></textarea>
+    <div id="adminStatus" class="admin-status"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
 <header>
   <div class="header-left">
     <div class="logo-mark">M</div>
@@ -159,11 +178,15 @@
       <div class="header-sub">Internal Staff Tool</div>
     </div>
   </div>
-  <div class="status-text"><span class="status-dot"></span>Online</div>
+  <div class="header-right">
+    <span class="user-badge" id="userBadge"></span>
+    <button class="admin-link" onclick="openAdmin()">Admin</button>
+    <div class="status-text"><span class="status-dot"></span>Online</div>
+  </div>
 </header>
 
 <div class="chat-area" id="chatArea">
-  <div class="welcome-card">
+  <div class="welcome-card" id="welcomeCard">
     <div class="welcome-icon">🌿</div>
     <h2>How can I help today?</h2>
     <p>I know Merrill's services, policies, and pricing inside out. I can also look up Service Autopilot how-tos and search the web for anything else you need.</p>
@@ -186,11 +209,11 @@
       </svg>
     </button>
   </div>
-  <div class="input-hint">Merrill Landscape Services · Internal Use Only</div>
+  <div class="input-hint">Merrill Landscape Services · Internal Use Only · Conversations are private</div>
 </div>
 
 <script>
-const SYSTEM_PROMPT = `You are the internal AI assistant for Merrill Landscape Services, a landscaping company based in Champaign, IL. You assist employees (not clients) with operational questions, client communications, Service Autopilot CRM guidance, and general research.
+const BASE_SYSTEM = `You are the internal AI assistant for Merrill Landscape Services, a landscaping company based in Champaign, IL. You assist employees (not clients) with operational questions, client communications, Service Autopilot CRM guidance, and general research.
 
 ## Company Overview
 Merrill Landscape Services is dedicated to designing and maintaining beautiful landscapes. Over 35 years of combined experience. Core values: Quality, Customer Satisfaction, Attention to Detail, Environmental Responsibility (100% carbon-neutral through Clean Advantage program).
@@ -261,73 +284,205 @@ Fertilization safety: safe for pets/children; stay off lawn ~1 hour after applic
 - Startup: $149.95. Pressurize, inspect zones, adjust heads, program controller.
 - Winterization: $149.95. Shut down, blow out lines with compressor.
 - Emergency Irrigation Repair: priority dispatch, higher rate. Call preferred.
-- Scheduling emails sent end of April (startups) and end of September (winterizations). Target: startups by end of May, winterizations by end of October.
+- Scheduling emails sent end of April (startups) and end of September (winterizations).
 - No installation services, only startups, winterizations, and repairs.
-- For plumbing/backflow issues beyond scope: document findings, research and recommend qualified local plumber with contact info.
+- For plumbing/backflow issues: document findings, research and recommend qualified local plumber with contact info.
 
 ## Landscape Maintenance
 - Landscape Maintenance (Hourly): $64.95/person/hr + $25.95/yard of waste removed. Monthly option available. Spending cap can be set per visit.
 - Landscape Maintenance (Fixed): flat all-inclusive rate. One-time.
-- Bed Edging: mechanical or manual bed edge redefinition.
-- Mulch Installation: delivery + installation at 2-3 inch depth. Shredded hardwood, dyed, natural, or customer-specified.
-- Shrub Trimming: shaping, remove overgrowth/dead branches, cleanup.
-- Spring/Fall Cleanup: leaf removal from beds and lawn, overgrowth/weeds, cut back perennials, stick removal.
+- Bed Edging, Mulch Installation (2-3 inch depth), Shrub Trimming, Spring/Fall Cleanup.
 
 ## Landscape Design & Build
-- Landscape Design: on-site consultation, scaled design plan, revisions. Optional 3D renderings (extra fee). Installation estimate upon completion.
-- Landscape Installation, Paver/Stone Edging, Grading/Soil Prep/Tilling, Tree/Shrub Planting.
+- Landscape Design, Landscape Installation, Paver/Stone Edging, Grading/Soil Prep/Tilling, Tree/Shrub Planting.
 
 ## Tree & Stump Services
-- Tree Trimming: small to medium ornamental trees, up to 15-20ft. Pruning, shaping, cleanup.
-- Tree Removal: full takedown, debris removal. Equipment rental cost passed to client. Optional stump grinding.
-- Stump Grinding: grind to 4-6 inches below grade. Optional debris hauling.
+- Tree Trimming: up to 15-20ft. Pruning, shaping, cleanup.
+- Tree Removal: full takedown. Equipment rental cost passed to client.
+- Stump Grinding: 4-6 inches below grade.
 - Large tree removal may be outside capabilities, refer to trusted third party.
 
 ## Snow & Ice Management
-- Commercial seasonal contracts: per-event billing based on snowfall ranges. Salt billed separately by pound. No minimum accumulation required. 24/7 monitoring.
-- Residential (4 options):
-  Option 1: Driveway only, $59.95 base + $5/in under 6in, $10/in over 6in
-  Option 2: Driveway + walkway to front door, $69.95 base + $7/in under 6in, $14/in over 6in
-  Option 3: Driveway + walkway + 1 city sidewalk, $99.95 base + $9/in, $18/in
-  Option 4: Driveway + walkway + 2 city sidewalks (corner lot), $124.95 base + $11/in, $22/in
-- Add-ons: Stamped/paver driveway +$30 base +$1/in; Circle driveway +$20 +$1/in; Side-entry/L-shaped +$10 +$1/in; S or wave +$5 +$1/in; Additional standard driveway +$20 +$1/in; Extra walk up to 30ft +$15 +$1/in
-- Default trigger: 2 inches. Can customize.
-- Salting required for residential. Billed after each service.
-- Can add clients up to 24 hours before a snow event.
+- Commercial: per-event billing based on snowfall ranges. Salt billed separately. 24/7 monitoring.
+- Residential Option 1: Driveway only, $59.95 base + $5/in under 6in, $10/in over 6in
+- Residential Option 2: Driveway + front walkway, $69.95 base + $7/in, $14/in
+- Residential Option 3: Driveway + walkway + 1 sidewalk, $99.95 base + $9/in, $18/in
+- Residential Option 4: Driveway + walkway + 2 sidewalks (corner lot), $124.95 base + $11/in, $22/in
+- Add-ons: Stamped/paver +$30+$1/in; Circle drive +$20+$1/in; Side-entry +$10+$1/in; S/wave +$5+$1/in; Extra drive +$20+$1/in; Extra walk +$15+$1/in
+- Default trigger: 2 inches. Salting required for residential.
 
 ## Fuel Surcharge
-ALL services are charged a fuel surcharge EXCEPT landscape installation.
+ALL services charged a fuel surcharge EXCEPT landscape installation.
 
 ## Frequently Addressed Concerns
-- Lawn damage from mowers: inspect, discuss, repair at no charge.
-- Object damage: crew notes individual property hazards. Repair at no charge if damage occurs.
-- Mowed too quick: return and fix free of charge.
-- Gate left open: crew has route notes, can add gate alert.
-- Grass blown on surfaces: return to service for free. If cannot fix, pay to resolve.
-- Plow tore up lawn: repair in early spring at no charge.
-- Mowers too heavy: can switch to push mowing, but price may change.
-- Dry summer: crew still visits unless client cancels 24hr ahead. If grass does not meet serviceable conditions, skip + trip charge.
-- Pricing objections: not the cheapest but guarantee quality, front-page-worthy work, 100% satisfaction.
-- Card on file: required, but only charged for autopay or delinquency. Can also pay by check.
+- Lawn/object damage: repair at no charge.
+- Grass blown on surfaces: return to fix for free.
+- Plow damage: repair in early spring at no charge.
+- Pricing objections: not the cheapest but 100% satisfaction guarantee, front-page-worthy work.
+- Card on file: required, only charged for autopay or delinquency. Can also pay by check.
 
 ## Office Tasks & Tools
-- Use satellite imagery only for mowing and standard fertilization estimates.
+- Satellite imagery only for mowing and standard fertilization estimates.
 - In-person appointment required for: targeted weed control, installations, repairs, cleanups, mulch, landscape design.
 - Recurring landscape maintenance does NOT need an appointment.
-- Google Suite used for all office work (Gmail, Docs, Sheets, Calendar). All staff calendars are shared, appointments can be scheduled on behalf of Marcus or Bailey.
+- Google Suite for all office work. All staff calendars shared.
 - Service Autopilot V2 is the primary CRM.
 
 ## Service Autopilot CRM Guidance
-When an employee asks how to do something in Service Autopilot, use your knowledge of Service Autopilot V2 to provide step-by-step instructions. If you are unsure or the feature may have changed, use web search to look up current documentation at help.serviceautopilot.com or search "Service Autopilot how to [task]". Always be specific with navigation paths.
+When asked how to do something in Service Autopilot, provide step-by-step instructions based on your knowledge of V2. If unsure, use web search to find current documentation at help.serviceautopilot.com. Always be specific with navigation paths.
 
 ## Web Search
-You have access to web search. Use it when looking up Service Autopilot documentation, researching local vendors, finding pricing benchmarks, or any question that benefits from current data. Always tell the employee when you are searching.
+Use web search when looking up Service Autopilot docs, researching local vendors, finding pricing benchmarks, or any question needing current data. Tell the employee when you are searching.
 
 ## Tone
-You are talking to internal staff, not clients. Be direct and practical. For drafting client-facing emails, follow the writing style guidelines above. Always be helpful and specific. If you do not know something, say so and offer to search.`;
+You are talking to internal staff, not clients. Be direct, concise, and practical. For drafting client-facing emails, follow the writing style guidelines. If you do not know something, say so and offer to search.`;
 
+let currentEmployee = null;
+let employeeMemory = '';
+let liveKnowledge = '';
 let conversationHistory = [];
 let isLoading = false;
+let messageCount = 0;
+
+async function login() {
+  const name = document.getElementById('nameInput').value.trim();
+  const role = document.getElementById('roleInput').value.trim();
+  if (!name) { alert('Please enter your name.'); return; }
+
+  currentEmployee = { name, role };
+  document.getElementById('userBadge').textContent = name;
+  document.getElementById('loginScreen').style.display = 'none';
+
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  document.querySelectorAll('.avatar.user').forEach(a => a.textContent = initials);
+
+  await loadMemory(name);
+  await loadKnowledge();
+
+  const welcomeCard = document.getElementById('welcomeCard');
+  if (welcomeCard) {
+    const greeting = employeeMemory
+      ? `Welcome back, ${name.split(' ')[0]}! I remember our previous conversations.`
+      : `Hi ${name.split(' ')[0]}! How can I help you today?`;
+    welcomeCard.querySelector('h2').textContent = greeting;
+  }
+}
+
+async function loadMemory(name) {
+  try {
+    const res = await fetch('/.netlify/functions/db', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_memory', employee_name: name })
+    });
+    const data = await res.json();
+    employeeMemory = data.memory || '';
+  } catch (e) { employeeMemory = ''; }
+}
+
+async function loadKnowledge() {
+  try {
+    const res = await fetch('/.netlify/functions/db', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_knowledge' })
+    });
+    const data = await res.json();
+    liveKnowledge = data.content || '';
+  } catch (e) { liveKnowledge = ''; }
+}
+
+async function saveMemoryToDb(memory) {
+  try {
+    await fetch('/.netlify/functions/db', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save_memory', employee_name: currentEmployee.name, memory })
+    });
+  } catch (e) {}
+}
+
+function buildSystemPrompt() {
+  let prompt = BASE_SYSTEM;
+
+  if (liveKnowledge) {
+    prompt += `\n\n## LIVE KNOWLEDGE BASE UPDATES (these override the base knowledge above)\n${liveKnowledge}`;
+  }
+
+  prompt += `\n\n## Current Employee\nName: ${currentEmployee.name}\nRole: ${currentEmployee.role || 'Staff'}`;
+
+  if (employeeMemory) {
+    prompt += `\n\n## Memory About This Employee\n${employeeMemory}\n\nUse this memory naturally in conversation. Reference it when relevant but don't repeat it verbatim.`;
+  }
+
+  prompt += `\n\n## Memory Instructions\nAs you learn things about this employee (their preferences, common tasks, clients they mention, things they want you to remember), note them mentally. After every 5 messages, you will be asked to summarize what you have learned. Be helpful and personalized based on what you know.`;
+
+  return prompt;
+}
+
+async function updateMemory() {
+  const memoryPrompt = `Based on our conversation so far, summarize in 3-5 bullet points what you have learned about this employee that would be useful to remember for future conversations. Focus on: their role and responsibilities, preferences, clients or situations they mentioned, and anything they explicitly asked you to remember. Be concise. If there is nothing new worth remembering, just say "No new memory updates."`;
+
+  try {
+    const messages = [...conversationHistory, { role: 'user', content: memoryPrompt }];
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        system: 'You are a memory summarizer. Be brief and factual.',
+        messages
+      })
+    });
+    const data = await res.json();
+    const newMemory = data.content?.find(b => b.type === 'text')?.text || '';
+    if (newMemory && !newMemory.includes('No new memory')) {
+      employeeMemory = newMemory;
+      await saveMemoryToDb(newMemory);
+    }
+  } catch (e) {}
+}
+
+function openAdmin() {
+  document.getElementById('adminScreen').style.display = 'flex';
+  document.getElementById('knowledgeEditor').value = liveKnowledge || '// Add any service updates, pricing changes, or new policies here.\n// These will override the base knowledge for all employees immediately.\n// Example:\n// - We now offer gutter cleaning at $69.95/hr per person\n// - Weekly mowing minimum price is now $54.95 (updated March 2026)';
+}
+
+function closeAdmin() {
+  document.getElementById('adminScreen').style.display = 'none';
+}
+
+async function saveKnowledge() {
+  const adminKey = document.getElementById('adminKeyInput').value.trim();
+  const content = document.getElementById('knowledgeEditor').value.trim();
+  const status = document.getElementById('adminStatus');
+
+  if (!adminKey) { alert('Please enter the admin password.'); return; }
+
+  try {
+    const res = await fetch('/.netlify/functions/db', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save_knowledge', admin_key: adminKey, knowledge: content })
+    });
+    const data = await res.json();
+    if (data.error) {
+      status.style.color = '#c0392b';
+      status.textContent = 'Incorrect admin password.';
+    } else {
+      liveKnowledge = content;
+      status.style.color = 'var(--green-accent)';
+      status.textContent = 'Saved! Changes are live for all employees immediately.';
+    }
+    status.style.display = 'block';
+    setTimeout(() => status.style.display = 'none', 4000);
+  } catch (e) {
+    status.style.color = '#c0392b';
+    status.textContent = 'Error saving. Please try again.';
+    status.style.display = 'block';
+  }
+}
 
 function autoResize(el) {
   el.style.height = 'auto';
@@ -344,8 +499,8 @@ function sendQuick(btn) {
 }
 
 function scrollToBottom() {
-  const chatArea = document.getElementById('chatArea');
-  chatArea.scrollTop = chatArea.scrollHeight;
+  const c = document.getElementById('chatArea');
+  c.scrollTop = c.scrollHeight;
 }
 
 function addMessage(role, content) {
@@ -358,7 +513,12 @@ function addMessage(role, content) {
 
   const avatar = document.createElement('div');
   avatar.className = 'avatar ' + role;
-  avatar.textContent = role === 'ai' ? 'M' : 'U';
+  if (role === 'ai') {
+    avatar.textContent = 'M';
+  } else {
+    const initials = currentEmployee?.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'U';
+    avatar.textContent = initials;
+  }
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
@@ -389,18 +549,14 @@ function formatMarkdown(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const isBullet = /^[-•*] (.*)$/.test(line) || /^\d+\. (.*)$/.test(line);
-
     if (isBullet) {
       if (!inList) { html += '<ul style="padding-left:16px;margin:4px 0;">'; inList = true; }
       const content = line.replace(/^[-•*] /, '').replace(/^\d+\. /, '');
       html += '<li style="margin-bottom:2px;">' + content + '</li>';
     } else {
       if (inList) { html += '</ul>'; inList = false; }
-      if (line.trim() === '') {
-        html += '';
-      } else {
-        html += '<p style="margin:0 0 4px;">' + line + '</p>';
-      }
+      if (line.trim() === '') { html += ''; }
+      else { html += '<p style="margin:0 0 4px;">' + line + '</p>'; }
     }
   }
   if (inList) html += '</ul>';
@@ -410,16 +566,13 @@ function formatMarkdown(text) {
 function showTyping() {
   const chatArea = document.getElementById('chatArea');
   const div = document.createElement('div');
-  div.className = 'typing-indicator';
-  div.id = 'typing';
+  div.className = 'typing-indicator'; div.id = 'typing';
   const avatar = document.createElement('div');
-  avatar.className = 'avatar ai';
-  avatar.textContent = 'M';
+  avatar.className = 'avatar ai'; avatar.textContent = 'M';
   const dots = document.createElement('div');
   dots.className = 'typing-dots';
   dots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-  div.appendChild(avatar);
-  div.appendChild(dots);
+  div.appendChild(avatar); div.appendChild(dots);
   chatArea.appendChild(div);
   scrollToBottom();
 }
@@ -430,7 +583,7 @@ function hideTyping() {
 }
 
 async function sendMessage() {
-  if (isLoading) return;
+  if (isLoading || !currentEmployee) return;
   const input = document.getElementById('userInput');
   const text = input.value.trim();
   if (!text) return;
@@ -439,6 +592,7 @@ async function sendMessage() {
   input.style.height = 'auto';
   document.getElementById('sendBtn').disabled = true;
   isLoading = true;
+  messageCount++;
 
   addMessage('user', text);
   conversationHistory.push({ role: 'user', content: text });
@@ -451,7 +605,7 @@ async function sendMessage() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
-        system: SYSTEM_PROMPT,
+        system: buildSystemPrompt(),
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: conversationHistory
       })
@@ -464,7 +618,7 @@ async function sendMessage() {
       const chatArea = document.getElementById('chatArea');
       const errDiv = document.createElement('div');
       errDiv.className = 'message ai';
-      errDiv.innerHTML = '<div class="avatar ai">M</div><div class="error-bubble">Error: ' + (data.error.message || 'Something went wrong. Please try again.') + '</div>';
+      errDiv.innerHTML = '<div class="avatar ai">M</div><div class="error-bubble">Error: ' + (data.error.message || 'Something went wrong.') + '</div>';
       chatArea.appendChild(errDiv);
     } else {
       const textContent = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
@@ -472,14 +626,21 @@ async function sendMessage() {
 
       hideTyping();
       const bubble = addMessage('ai', '');
+
       if (hasSearch) {
         const note = document.createElement('div');
         note.className = 'search-note';
         note.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web search used';
         bubble.insertBefore(note, bubble.firstChild);
       }
-      bubble.innerHTML += formatMarkdown(textContent);
+      if (employeeMemory) {
+        const note = document.createElement('div');
+        note.className = 'memory-note';
+        note.innerHTML = '🧠 Using your saved memory';
+        bubble.insertBefore(note, bubble.firstChild);
+      }
 
+      bubble.innerHTML += formatMarkdown(textContent);
       conversationHistory.push({ role: 'assistant', content: data.content });
 
       if (data.stop_reason === 'tool_use') {
@@ -491,6 +652,8 @@ async function sendMessage() {
           });
         }
       }
+
+      if (messageCount % 5 === 0) { updateMemory(); }
     }
   } catch (err) {
     hideTyping();
