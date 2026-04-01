@@ -470,13 +470,16 @@ async function saveKnowledge() {
     if (data.error) {
       status.style.color = '#c0392b';
       status.textContent = 'Incorrect admin password.';
+      status.style.display = 'block';
+      setTimeout(() => status.style.display = 'none', 4000);
     } else {
       liveKnowledge = content;
+      document.getElementById('adminKeyInput').value = '';
+      document.getElementById('knowledgeEditor').value = '';
       status.style.color = 'var(--green-accent)';
-      status.textContent = 'Saved! Changes are live for all employees immediately.';
+      status.textContent = 'Saved! Changes are live for all employees immediately. You can close this panel.';
+      status.style.display = 'block';
     }
-    status.style.display = 'block';
-    setTimeout(() => status.style.display = 'none', 4000);
   } catch (e) {
     status.style.color = '#c0392b';
     status.textContent = 'Error saving. Please try again.';
@@ -653,7 +656,7 @@ async function sendMessage() {
         }
       }
 
-      if (messageCount % 5 === 0) { updateMemory(); }
+      updateMemory();
     }
   } catch (err) {
     hideTyping();
