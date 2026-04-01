@@ -145,7 +145,6 @@
     <h2>Merrill AI Assistant</h2>
     <p>Enter your name to get started. Your memory and preferences will be saved for next time.</p>
     <input type="text" id="nameInput" class="login-input" placeholder="Your first and last name" autocomplete="name" />
-    <input type="text" id="roleInput" class="login-input" placeholder="Your role (e.g. Office Manager, Crew Lead)" />
     <button class="login-btn" onclick="login()">Get Started</button>
     <div class="login-note">Conversations are private and not visible to anyone else.</div>
   </div>
@@ -346,10 +345,9 @@ let messageCount = 0;
 
 async function login() {
   const name = document.getElementById('nameInput').value.trim();
-  const role = document.getElementById('roleInput').value.trim();
   if (!name) { alert('Please enter your name.'); return; }
 
-  currentEmployee = { name, role };
+  currentEmployee = { name };
   document.getElementById('userBadge').textContent = name;
   document.getElementById('loginScreen').style.display = 'none';
 
@@ -409,7 +407,7 @@ function buildSystemPrompt() {
     prompt += `\n\n## LIVE KNOWLEDGE BASE UPDATES (these override the base knowledge above)\n${liveKnowledge}`;
   }
 
-  prompt += `\n\n## Current Employee\nName: ${currentEmployee.name}\nRole: ${currentEmployee.role || 'Staff'}`;
+  prompt += `\n\n## Current Employee\nName: ${currentEmployee.name}`;
 
   if (employeeMemory) {
     prompt += `\n\n## Memory About This Employee\n${employeeMemory}\n\nUse this memory naturally in conversation. Reference it when relevant but don't repeat it verbatim.`;
@@ -446,7 +444,8 @@ async function updateMemory() {
 
 function openAdmin() {
   document.getElementById('adminScreen').style.display = 'flex';
-  document.getElementById('knowledgeEditor').value = liveKnowledge || '// Add any service updates, pricing changes, or new policies here.\n// These will override the base knowledge for all employees immediately.\n// Example:\n// - We now offer gutter cleaning at $69.95/hr per person\n// - Weekly mowing minimum price is now $54.95 (updated March 2026)';
+  document.getElementById('knowledgeEditor').value = '';
+  document.getElementById('adminKeyInput').value = '';
 }
 
 function closeAdmin() {
@@ -464,7 +463,7 @@ async function saveKnowledge() {
     const res = await fetch('/.netlify/functions/db', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save_knowledge', admin_key: adminKey, knowledge: content })
+      body: JSON.stringify({ action: 'add_knowledge', admin_key: adminKey, knowledge: content })
     });
     const data = await res.json();
     if (data.error) {
